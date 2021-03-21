@@ -1,0 +1,27 @@
+source 'https://rubygems.org'
+
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+
+gem 'rake'
+gem 'puma'
+
+gem 'activerecord'
+gem 'sinatra'
+gem 'sinatra-contrib'
+gem 'sinatra-activerecord'
+gem 'sinatra-param', require: 'sinatra/param'
+gem 'kaminari'
+gem 'pg'
+gem 'jsonapi-serializer'
+gem 'dry-initializer'
+
+group :test do
+  gem 'rspec'
+  gem 'factory_bot'
+  gem 'rack-test'
+  gem 'database_cleaner-active_record'
+
+  gem 'pry-doc'
+  gem 'pry-byebug'
+  gem 'pry-rescue'
+end
