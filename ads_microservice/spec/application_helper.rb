@@ -1,19 +1,13 @@
 require 'spec_helper'
-require 'pry'
-require 'rack/test'
-require 'rubygems'
-require 'bundler'
 
 ENV['RACK_ENV'] ||= 'test'
 
-Bundler.require
+require_relative '../config/environment'
 
-Dir['./spec/support/**/*.rb'].sort.each { |f| require f }
-
-require_relative '../config/application'
-require_relative '../app'
+abort('You run tests in production mode. Please don\'t do this!') if Application.environment == :production
+Dir[Application.root.concat('/spec/support/**/*.rb')].sort.each { |f| require f }
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods
-  config.include RackHelpers, type: :request
+  config.include RouteHelpers, type: :routes
 end
