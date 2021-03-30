@@ -1,0 +1,7 @@
+require_relative '../models/ad'
+require_relative '../services/basic_service'
+require_relative '../services/ads/create_service'
+require_relative '../serializers/error_serializer'
+require_relative '../serializers/ad_serializer'
+require_relative '../helpers/api_errors'
+require_relative '../helpers/pagination_links'
