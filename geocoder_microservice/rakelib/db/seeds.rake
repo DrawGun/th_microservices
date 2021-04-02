@@ -8,7 +8,7 @@ namespace :db do
     CSV.read(data_path, headers: true).inject({}) do |result, row|
 
       city_params = {
-        title: row['city'],
+        city_name: row['city'],
         lat: row['geo_lat'].to_f,
         lon: row['geo_lon'].to_f
       }

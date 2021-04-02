@@ -1,5 +1,5 @@
 class GeocoderParamsContract < Dry::Validation::Contract
   params do
-    required(:title).filled(:string)
+    required(:city_name).filled(:string)
   end
 end

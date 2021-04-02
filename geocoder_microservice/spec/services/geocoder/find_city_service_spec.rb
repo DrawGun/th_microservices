@@ -2,10 +2,10 @@ RSpec.describe Geocoder::FindCityService do
   subject { described_class }
 
   context 'existent city' do
-    let(:city) { create(:city, title: 'Москва') }
+    let(:city) { create(:city, city_name: 'Москва') }
 
     it 'can return coordinates data' do
-      result = subject.call(city.title)
+      result = subject.call(city.city_name)
 
       expect(result.coordinates).to eq([city.lat, city.lon])
     end

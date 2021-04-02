@@ -2,16 +2,16 @@ module Geocoder
   class FindCityService
     prepend BasicService
 
-    param :title
+    param :city_name
 
     attr_reader :city
 
     def call
-      @city = City.find_by(title: title) if City.where(title: title).exists?
+      @city = City.find_by(city_name: city_name) if City.where(city_name: city_name).exists?
     end
 
     def coordinates
-      return nil if @city.blank?
+      return if @city.blank?
 
       [@city.lat, @city.lon]
     end

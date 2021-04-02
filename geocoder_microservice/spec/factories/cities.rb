@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :city do
-    title { generate(:title) }
+    city_name { generate(:city_name) }
 
     lat { 55.7540471 }
     lon { 37.620405 }

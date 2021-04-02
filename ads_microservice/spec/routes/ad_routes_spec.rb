@@ -1,4 +1,4 @@
-RSpec.describe AdRoutes, type: :routes do
+RSpec.describe AdRoutes, type: :request do
   describe 'GET /v1' do
     let(:user_id) { 101 }
 
@@ -16,6 +16,14 @@ RSpec.describe AdRoutes, type: :routes do
 
   describe 'POST /v1' do
     let(:user_id) { 101 }
+    let(:city_name) { 'City name' }
+    let(:geocoder_service) { instance_double('Geocoder service') }
+    let(:coordinates) { [55.7540471, 37.620405] }
+
+    before do
+      allow(geocoder_service).to receive(:geocode).with(city_name).and_return(coordinates)
+      allow(GeocoderService::Client).to receive(:new).and_return(geocoder_service)
+    end
 
     context 'missing parameters' do
       it 'returns an error' do
@@ -54,7 +62,7 @@ RSpec.describe AdRoutes, type: :routes do
         {
           title: 'Ad title',
           description: 'Ad description',
-          city: 'City'
+          city: city_name
         }
       end
 

@@ -15,7 +15,7 @@ RSpec.describe GeocoderRoutes, type: :routes do
       before { allow(City).to receive(:find_by).and_return(nil) }
 
       it 'returns an error' do
-        post '/v1', title: 'Invalid title'
+        post '/v1', city_name: 'Invalid title'
 
         expected_meta = {"meta"=>nil}
 
@@ -25,10 +25,10 @@ RSpec.describe GeocoderRoutes, type: :routes do
     end
 
     context 'valid parameters' do
-      let!(:city) { create(:city, title: 'Москва') }
+      let!(:city) { create(:city, city_name: 'Москва') }
 
       it 'returns created status' do
-        post '/v1', title: city.title
+        post '/v1', city_name: city.city_name
 
         expected_meta = {"meta"=>[55.7540471, 37.620405]}
 
