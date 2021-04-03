@@ -21,8 +21,7 @@ class AdRoutes < Application
 
       if result.success?
         ad = result.ad
-        Ads::UpdateCoordinatesService.call(ad: ad)
-
+        result = Ads::UpdateCoordinatesService.call(ad: result.ad)
         serializer = AdSerializer.new(ad)
 
         status 201
