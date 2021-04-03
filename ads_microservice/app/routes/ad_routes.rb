@@ -20,7 +20,9 @@ class AdRoutes < Application
       )
 
       if result.success?
-        serializer = AdSerializer.new(result.ad)
+        ad = result.ad
+        result = Ads::UpdateCoordinatesService.call(ad: result.ad)
+        serializer = AdSerializer.new(ad)
 
         status 201
         json serializer.serializable_hash
