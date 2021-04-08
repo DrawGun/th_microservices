@@ -22,7 +22,7 @@ RSpec.describe AdRoutes, type: :request do
 
     before do
       allow(geocoder_service).to receive(:geocode).with(city_name).and_return(coordinates)
-      allow(GeocoderService::Client).to receive(:new).and_return(geocoder_service)
+      allow(GeocoderService::Http::Client).to receive(:new).and_return(geocoder_service)
     end
 
     context 'missing parameters' do

@@ -18,7 +18,7 @@ module Ads
     private
 
     def geocoder_client
-      @geocoder_client ||= GeocoderService::Client.new
+      @geocoder_client ||= GeocoderService::Http::Client.new
     end
 
     def coordinates
