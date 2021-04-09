@@ -1,9 +1,9 @@
 module GeocoderService
   module Http
     module Api
-      def geocode(city_name, version: 'v1')
+      def geocode(ad, version: 'v1')
         response = connection.post("/geocode/#{version}") do |request|
-          request.params = { city_name: city_name }
+          request.params = { city_name: ad.city }
         end
 
         response.body.dig('meta')

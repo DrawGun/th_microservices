@@ -17,12 +17,13 @@ RSpec.describe AdRoutes, type: :request do
   describe 'POST /v1' do
     let(:user_id) { 101 }
     let(:city_name) { 'City name' }
+
     let(:geocoder_service) { instance_double('Geocoder service') }
-    let(:coordinates) { [55.7540471, 37.620405] }
+    let(:geocoder_client) { "GeocoderService::#{Settings.clients.geocoder}::Client".classify.constantize }
 
     before do
-      allow(geocoder_service).to receive(:geocode).with(city_name).and_return(coordinates)
-      allow(GeocoderService::Http::Client).to receive(:new).and_return(geocoder_service)
+      allow(geocoder_service).to receive(:geocode).and_return(nil)
+      allow(geocoder_client).to receive(:new).and_return(geocoder_service)
     end
 
     context 'missing parameters' do

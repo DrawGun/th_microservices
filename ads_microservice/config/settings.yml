@@ -1,5 +1,9 @@
+clients:
+  geocoder: Rpc
 db:
   adapter: postgresql
   host: localhost
 pagination:
   page_size: 10
+rabbitmq:
+  consumer_pool: 10
