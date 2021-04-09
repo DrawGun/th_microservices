@@ -2,7 +2,7 @@ module Geocoder
   class FindCityService
     prepend BasicService
 
-    param :city_name
+    option :city_name
 
     attr_reader :city
 
@@ -13,7 +13,7 @@ module Geocoder
     def coordinates
       return if @city.blank?
 
-      [@city.lat, @city.lon]
+      { lat: @city.lat, lon: @city.lon }
     end
   end
 end
