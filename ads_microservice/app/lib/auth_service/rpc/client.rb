@@ -1,0 +1,30 @@
+require 'dry-initializer'
+require_relative 'api'
+
+module AuthService
+  module Rpc
+    class Client
+      extend Dry::Initializer[undefined: false]
+      include Api
+
+      option :queue, default: proc { create_queue }
+
+      private
+
+      def create_queue
+        channel = RabbitMq.channel
+        channel.queue('authorization', durable: true)
+      end
+
+      def publish(payload, opts = {})
+        @queue.publish(
+          payload,
+          opts.merge(
+            persistent: true,
+            app_id: 'ads'
+          )
+        )
+      end
+    end
+  end
+end

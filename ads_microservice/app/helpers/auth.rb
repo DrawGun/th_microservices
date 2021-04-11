@@ -5,6 +5,10 @@ module Auth
     metadata['user_id']
   end
 
+  def token
+    matched_token
+  end
+
   private
 
   def client
