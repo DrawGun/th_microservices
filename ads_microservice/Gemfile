@@ -40,3 +40,6 @@ group :test, :development do
   gem 'pry-byebug'
   gem 'pry-rescue'
 end
+
+gem 'rack-ougai', '~> 0.2.1'
+gem 'rack-request-id', '~> 0.0.4'
