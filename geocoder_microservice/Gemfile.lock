@@ -77,6 +77,9 @@ GEM
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.7)
+    oj (3.11.3)
+    ougai (1.9.1)
+      oj (~> 3.10)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -92,6 +95,9 @@ GEM
     puma (4.3.7)
       nio4r (~> 2.0)
     rack (2.2.3)
+    rack-ougai (0.2.1)
+      ougai (~> 1.5)
+      rack (~> 2.0)
     rack-protection (2.1.0)
       rack
     rack-test (1.1.0)
@@ -144,6 +150,7 @@ DEPENDENCIES
   pry-doc
   pry-rescue
   puma (~> 4.3.0)
+  rack-ougai (~> 0.2.1)
   rack-test (~> 1.1.0)
   rake (~> 13.0.1)
   rspec (~> 3.9.0)
