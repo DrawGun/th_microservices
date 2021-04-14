@@ -1,4 +1,5 @@
 channel = RabbitMq.consumer_channel
+exchange = channel.default_exchange
 queue = channel.queue('authorization', durable: true)
 
 queue.subscribe(manual_ack: true) do |delivery_info, properties, payload|
@@ -6,10 +7,10 @@ queue.subscribe(manual_ack: true) do |delivery_info, properties, payload|
   extracted_token = JwtEncoder.decode(payload['token']) rescue {}
   result = Auth::FetchUserService.call(extracted_token['uuid'])
 
-  if result.success?
-    client = AdsService::Rpc::Client.fetch
-    client.return_user_data(payload['ad'], result.user.id)
-  end
-
-  channel.ack(delivery_info.delivery_tag)
+  data = result.success? ? { user_id: result.user.id }.to_json : ''
+  exchange.publish(
+    data,
+    routing_key: properties.reply_to,
+    correlation_id: properties.correlation_id
+  )
 end

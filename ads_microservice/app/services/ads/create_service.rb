@@ -21,7 +21,7 @@ module Ads
 
       if @ad.valid?
         @ad.save
-        # geocode!
+        geocode!
       else
         fail!(@ad.errors)
       end
@@ -46,7 +46,7 @@ module Ads
         @geocoder_service.geocode(@ad)
       else
         data = @geocoder_service.geocode(@ad)
-        Ads::UpdateService.call(@ad.id, data)
+        Ads::UpdateService.call(id: @ad.id, data: data.symbolize_keys)
       end
     end
   end

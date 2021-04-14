@@ -1,4 +1,4 @@
-module GeocoderService
+module AuthService
   module Http
     module Api
       def auth(token, version: 'v1')
