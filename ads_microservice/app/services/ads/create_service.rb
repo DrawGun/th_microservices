@@ -14,12 +14,14 @@ module Ads
     attr_reader :ad
 
     def call
+      return fail!(I18n.t(:blank, scope: 'model.errors.ad.user_id')) if @user_id.blank?
+
       @ad = ::Ad.new(@ad.to_h)
       @ad.user_id = @user_id
 
       if @ad.valid?
         @ad.save
-        geocode!
+        # geocode!
       else
         fail!(@ad.errors)
       end
