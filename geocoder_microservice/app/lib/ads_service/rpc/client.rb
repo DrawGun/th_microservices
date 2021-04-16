@@ -50,7 +50,10 @@ module AdsService
             opts.merge(
               app_id: Settings.app.name,
               correlation_id: @correlation_id,
-              reply_to: @reply_queue.name
+              reply_to: @reply_queue.name,
+              headers: {
+                request_id: Thread.current[:request_id]
+              }
             )
           )
 
