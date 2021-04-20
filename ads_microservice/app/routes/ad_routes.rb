@@ -14,13 +14,15 @@ class AdRoutes < Application
     post do
       ad_params = validate_with!(AdParamsContract)
 
+      auth_result = Auth::CheckUser.call(token: token)
+
       result = Ads::CreateService.call(
         ad: ad_params[:ad],
-        user_id: user_id
+        user_id: auth_result.user_id
       )
 
       if result.success?
-        serializer = AdSerializer.new(result.ad)
+        serializer = AdSerializer.new(result.ad.reload)
 
         status 201
         json serializer.serializable_hash

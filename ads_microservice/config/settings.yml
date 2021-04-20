@@ -2,6 +2,7 @@ app:
   name: ads
 clients:
   geocoder: Rpc
+  auth: Rpc
 db:
   adapter: postgresql
   host: localhost

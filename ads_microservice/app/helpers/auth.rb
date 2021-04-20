@@ -5,6 +5,8 @@ module Auth
     metadata['user_id']
   end
 
+  alias :token :matched_token
+
   private
 
   def client
