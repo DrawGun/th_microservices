@@ -43,6 +43,7 @@
         name: geocoder
         load_path: '/tmp/{{ timestamp }}-{{image }}.tar'
         source: load
+        force_tag: yes
     - name: remove image file
       file:
         path: '/tmp/{{ timestamp }}-{{image }}.tar'

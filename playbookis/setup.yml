@@ -33,6 +33,8 @@
   gather_facts: no
   vars:
     env_vars: |
+      DOCKER_USER=drawgun
+      ADS_DATABASE_URL=postgresql://ads:gzMTokddxCw9UBi@localhost/ads_microservice_production
       RABBITMQ_HOST=127.0.0.1
       RABBITMQ_USER=ads
       RABBITMQ_PASSWORD=Usozq7ZRRn2qNmc
