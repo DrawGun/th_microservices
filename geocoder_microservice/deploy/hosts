@@ -1,0 +1,5 @@
+[app]
+167.172.99.49
+
+[all:vars]
+ansible_user=drawgun

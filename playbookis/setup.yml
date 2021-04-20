@@ -1,0 +1,50 @@
+---
+- hosts: app
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: ensure apt chache is up to date
+      apt:
+        update_cache: yes
+        cache_valid_time: 86400
+    - name: ensure packages are installed
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+    - name: ensure GPG key is added
+      apt_key:
+        url: 'https://download.docker.com/linux/ubuntu/gpg'
+        state: present
+    - name: ensure rabbitmq repository is added
+      apt_repository:
+        repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable'
+        state: present
+    - name: ensure apt chache is up to date
+      apt:
+        update_cache: yes
+    - name: ensure package is installed
+      apt:
+        name: docker-ce
+- hosts: app
+  become: yes
+  gather_facts: no
+  vars:
+    env_vars: |
+      RABBITMQ_HOST=127.0.0.1
+      RABBITMQ_USER=ads
+      RABBITMQ_PASSWORD=Usozq7ZRRn2qNmc
+      RACK_ENV=production
+  tasks:
+    - name: ensure pip is installed
+      apt:
+        name: python3-pip
+    - name: ensure python dependencies are installed
+      pip:
+        name: docker
+    - name: ensure env file is uploaded
+      copy:
+        content: '{{ env_vars }}'
+        dest: '/home/{{ ansible_user }}/.env'

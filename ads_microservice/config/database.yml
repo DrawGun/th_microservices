@@ -1,6 +1,0 @@
-development:
-  adapter: postgresql
-  database: ad_development
-test:
-  adapter: postgresql
-  database: ad_test
