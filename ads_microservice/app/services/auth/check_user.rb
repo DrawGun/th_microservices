@@ -10,7 +10,8 @@ module Auth
     def call
       response = auth_service.auth(token)
 
-      @user_id = if client_name == 'Rpc'
+      @user_id = case client_name
+      when 'Rpc'
         auth_service.response
       else
         response['user_id']
