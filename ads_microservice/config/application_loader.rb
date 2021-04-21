@@ -19,9 +19,11 @@ module ApplicationLoader
   end
 
   def require_app
+    require_file 'app/helpers/validations'
     require_dir 'app/helpers'
     require_file 'config/application'
     require_file 'app/services/basic_service'
+    require_file "app/lib/geocoder_service/#{Settings.clients.geocoder.downcase}/api"
     require_dir 'app'
   end
 

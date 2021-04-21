@@ -3,7 +3,7 @@ namespace :db do
   task seed: :settings do
     require 'sequel'
 
-    Sequel.connect(Settings.db.to_hash) do |db|
+    Sequel.connect(Settings.db.url || Settings.db.to_hash) do |db|
       db[:ads].delete
 
       time = Time.now

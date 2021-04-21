@@ -1,0 +1,14 @@
+[db]
+167.172.99.49
+
+[rabbitmq]
+167.172.99.49
+
+[nginx]
+167.172.99.49
+
+[app]
+167.172.99.49
+
+[all:vars]
+ansible_user=drawgun
