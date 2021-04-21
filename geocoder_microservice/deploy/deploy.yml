@@ -3,10 +3,9 @@
   gather_facts: no
   vars:
     image: geocoder
+    registry: docker.pkg.github.com
+    repository: '{{ registry }}/drawgun/th_microservices/{{ image }}'
   tasks:
-    - name: setup facts
-      set_fact:
-        timestamp: '{{ lookup("pipe", "date -u +%Y%m%d%H%M%S") }}'
     - name: build docker image
       delegate_to: 127.0.0.1
       docker_image:
@@ -16,43 +15,46 @@
         name: '{{ image }}'
         source: build
         force_source: yes
-    - name: save image to file
+    - name: login to docker registry
+      delegate_to: 127.0.0.1
+      docker_login:
+        registry: '{{ registry }}'
+        username: '{{ lookup("env", "DOCKER_USER") }}'
+        password: '{{ lookup("env", "DOCKER_PASSWORD") }}'
+    - name: push image
       delegate_to: 127.0.0.1
       docker_image:
         name: '{{ image }}'
-        tag: latest
-        archive_path: '{{ image }}.tar'
+        repository: '{{ repository }}'
+        push: yes
         source: local
-    - name: compress image
-      delegate_to: 127.0.0.1
-      archive:
-        path: '{{ image }}.tar'
-        dest: '{{ image }}.tar.gz'
-        remove: yes
-    - name: upload image
-      copy:
-        src: '{{ image }}.tar.gz'
-        dest: '/tmp/{{ timestamp }}-{{image }}.tar.gz'
-    - name: extract image
-      shell: 'gunzip {{ timestamp }}-{{image }}.tar.gz'
-      args:
-        chdir: /tmp
-    - name: load image
-      become: yes
-      docker_image:
-        name: geocoder
-        load_path: '/tmp/{{ timestamp }}-{{image }}.tar'
-        source: load
         force_tag: yes
-    - name: remove image file
-      file:
-        path: '/tmp/{{ timestamp }}-{{image }}.tar'
-        state: absent
+    - name: login to docker registry on remote
+      docker_login:
+        registry: '{{ registry }}'
+        username: '{{ lookup("env", "DOCKER_USER") }}'
+        password: '{{ lookup("env", "DOCKER_PASSWORD") }}'
+    - name: pull image on remote
+      docker_image:
+        name: '{{ repository }}'
+        source: pull
+        force_source: yes
+    - name: run database migrations
+      become: yes
+      run_once: yes
+      docker_container:
+        name: geocoder-migrations
+        image: '{{ repository }}'
+        network_mode: host
+        detach: no
+        cleanup: yes
+        command: bin/rake db:seeds --trace
+        env_file: '/home/{{ ansible_user }}/.env'
     - name: start geocoder container
       become: yes
       docker_container:
         name: geocoder
-        image: '{{ image }}'
+        image: '{{ repository }}'
         network_mode: host
         restart_policy: on-failure
         restart_retries: 10

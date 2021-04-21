@@ -1,3 +1,11 @@
+production:
+  clients:
+    default:
+      database: <%= ENV.fetch('MONGOID_DATABASE') %>
+      hosts:
+        - <%= ENV.fetch('MONGOID_HOST') %>
+      options:
+        server_selection_timeout: 1
 development:
   clients:
     default:
