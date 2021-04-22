@@ -5,6 +5,13 @@ module Auth
     metadata['user_id']
   end
 
+  def matched_token
+    result = auth_header&.match(AUTH_TOKEN)
+    return if result.blank?
+
+    result[:token]
+  end
+
   alias :token :matched_token
 
   private
@@ -15,13 +22,6 @@ module Auth
 
   def metadata
     client.auth(matched_token)
-  end
-
-  def matched_token
-    result = auth_header&.match(AUTH_TOKEN)
-    return if result.blank?
-
-    result[:token]
   end
 
   def auth_header
