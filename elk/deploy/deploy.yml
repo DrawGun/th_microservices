@@ -1,0 +1,44 @@
+---
+- hosts: elk
+  gather_facts: no
+  vars:
+    image: elk
+    registry: docker.pkg.github.com
+    repository: '{{ registry }}/drawgun/th_microservices/{{ image }}'
+  tasks:
+    - name: setup facts
+      set_fact:
+        timestamp: '{{ lookup("pipe", "date -u +%Y%m%d%H%M%S") }}'
+    - name: compress elk folder to file
+      delegate_to: 127.0.0.1
+      archive:
+        path: ../elk
+        dest: elk.tar.gz
+    - name: upload elk archive
+      copy:
+        src: '{{ image }}.tar.gz'
+        dest: '/tmp/{{ timestamp }}-{{image }}.tar.gz'
+    - name: extract elk
+      shell: 'gunzip {{ timestamp }}-{{image }}.tar.gz'
+      args:
+        chdir: /tmp
+    - name: Recursively remove directory
+      become: yes
+      file:
+        path: /srv/elk
+        state: absent
+    - name: unarchive to elk folder
+      become: yes
+      unarchive:
+        src: '/tmp/{{ timestamp }}-{{image }}.tar'
+        dest: /srv
+        remote_src: yes
+    - name: build elk containers
+      become: yes
+      command: 'docker-compose up --detach --build'
+      args:
+        chdir: /srv/elk
+    - name: remove image file
+      file:
+        path: '/tmp/{{ timestamp }}-{{image }}.tar'
+        state: absent

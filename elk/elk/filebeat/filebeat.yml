@@ -1,0 +1,22 @@
+filebeat:
+  inputs:
+    - type: docker
+      enabled: true
+      json:
+        message_key: message
+        keys_under_root: true
+      containers.ids:
+        - '14ea1514142a' # docker.pkg.github.com/drawgun/th_microservices/ads
+        - '3fa7a5c7266d' # docker.pkg.github.com/drawgun/th_microservices/auth
+        - 'ce8079f851d4' # docker.pkg.github.com/drawgun/th_microservices/geocoder
+
+setup:
+  kibana:
+    host: http://kibana:5601
+
+output:
+  logstash:
+    enabled: true
+    bulk_max_size: 1
+    hosts:
+      - logstash:5044
