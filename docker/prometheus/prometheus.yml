@@ -6,4 +6,4 @@ scrape_configs:
       - targets: ['host.docker.internal:9100']
   - job_name: 'services'
     static_configs:
-      - targets: ['host.docker.internal:3000', 'host.docker.internal:3011']
+      - targets: ['host.docker.internal:3000', 'host.docker.internal:3011', 'host.docker.internal:3012']
