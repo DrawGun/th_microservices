@@ -6,7 +6,7 @@ Application.configure do |app|
     level: Settings.logger.level
   )
 
-  logger.formatter = Ougai::Formatters::Readable.new if app.development?
+  logger.formatter = Ougai::Formatters::Readable.new if ENV['READABLE_LOGS']
 
   logger.before_log = lambda do |data|
     data[:service] = { name: Settings.app.name }

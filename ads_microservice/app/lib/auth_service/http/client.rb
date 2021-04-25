@@ -10,8 +10,8 @@ module AuthService
       option :url, default: proc { 'http://localhost:3012' }
       option :connection, default: proc { build_connection }
 
-      def self.fetch
-        new
+      class << self
+        alias_method :fetch, :new
       end
 
       private
