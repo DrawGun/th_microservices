@@ -4,6 +4,10 @@ db:
 pagination:
   page_size: 10
 app:
+  name: auth
   secret: secret
 rabbitmq:
   consumer_pool: 10
+logger:
+  path: log/app.log
+  level: info

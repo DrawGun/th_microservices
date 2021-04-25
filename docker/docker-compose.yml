@@ -20,27 +20,57 @@ services:
     image: docker.elastic.co/beats/filebeat-oss:7.8.0
     container_name: filebeat
     depends_on:
-      - elasticsearch
+      - logstash
     volumes:
       - filebeat:/usr/share/filebeat/data
       - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - /Users/drawgun/Documents/web/thinknetica/microservices/th_microservices/ads_microservice/log:/var/log/ads:ro
       - /Users/drawgun/Documents/web/thinknetica/microservices/th_microservices/geocoder_microservice/log:/var/log/geocoder:ro
+      - /Users/drawgun/Documents/web/thinknetica/microservices/th_microservices/auth_microservice/log:/var/log/auth:ro
+    networks:
+      - elk
+  logstash:
+    image: docker.elastic.co/logstash/logstash-oss:7.8.0
+    container_name: logstash
+    ports:
+      - 5044:5044 #beats
+      - 5046:5046 #tcp
+    depends_on:
+      - elasticsearch
+    environment:
+      ES_JAVA_OPTS: -Xmx2048m -Xms2048m"
+      http.host: 0.0.0.0
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    networks:
+      - elk
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.8.0
     container_name: elasticsearch
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
       - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - 9200:9200
+    networks:
+      - elk
   kibana:
     image: docker.elastic.co/kibana/kibana-oss:7.8.0
     container_name: kibana
     depends_on:
       - elasticsearch
     environment:
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_URL: "http://elasticsearch:9200"
     ports:
       - 5601:5601
+    networks:
+      - elk
   prom:
     image: prom/prometheus
     container_name: prom
@@ -58,9 +88,16 @@ services:
       - grafana:/var/lib/grafana
 volumes:
   mongodb:
+    driver: local
   rabbitmq:
+    driver: local
   filebeat:
+    driver: local
   elasticsearch:
+    driver: local
   prometheus:
+    driver: local
   grafana:
-
+    driver: local
+networks:
+  elk:

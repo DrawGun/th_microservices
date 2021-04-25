@@ -43,3 +43,4 @@ end
 
 gem 'rack-ougai', '~> 0.2.1'
 gem 'rack-request-id', '~> 0.0.4'
+gem 'amazing_print', '~> 1.3.0'

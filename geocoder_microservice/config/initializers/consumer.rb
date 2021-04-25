@@ -9,7 +9,7 @@ queue.subscribe(manual_ack: true) do |delivery_info, properties, payload|
   coordinates = result.coordinates
 
   Application.logger.info(
-    'geocoded_coordinates',
+    'get_coordinates',
     ad_id: payload['id'],
     city: payload['city'],
     coordinates: coordinates
