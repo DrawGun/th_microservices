@@ -1,10 +1,9 @@
-require 'pry'
 require_relative '../../config/environment'
 
 namespace :db do
   desc 'Run database migrations'
-  task seed: :settings do
-    Sequel.connect(Settings.db.to_hash) do |db|
+  task seeds: :settings do
+    Sequel.connect(Settings.db.url || Settings.db.to_hash) do |db|
       db[:user_sessions].delete
       db[:users].delete
 

@@ -42,3 +42,32 @@
         type: database
         priv: ALL
         state: absent
+- hosts: db
+  become: yes
+  become_user: postgres
+  gather_facts: no
+  vars:
+    database: auth_microservice_production
+    user: auth
+    password: gzMTokddxCw9UBi
+  tasks:
+    - name: ensure database is created
+      postgresql_db:
+        name: '{{ database }}'
+    - name: ensure user has access to database
+      postgresql_user:
+        db: '{{ database }}'
+        name: '{{ user }}'
+        password: '{{ password }}'
+        priv: ALL
+    - name: ensure user has no extra privileges
+      postgresql_user:
+        name: '{{ user }}'
+        role_attr_flags: NOCREATEDB,SUPERUSER
+    - name: ensure no other user can access the database
+      postgresql_privs:
+        db: '{{ database }}'
+        role: PUBLIC
+        type: database
+        priv: ALL
+        state: absent
